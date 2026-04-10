@@ -141,6 +141,31 @@ const ALGO_CONFIG = {
         <h3>Resumen</h3>
         <p>Siempre hace exactamente n-1 intercambios. Lento (O n²) pero predecible.</p>
       </div>`
+  },
+  merge_sort: {
+    engineKey: 'merge_sort',
+    variants: [{ value:'merge_sort', label:'Recursivo' }],
+    theory: `
+      <div class="theory-section">
+        <div class="theory-icon">🧠</div>
+        <h3>Explicación Sencilla</h3>
+        <p>Imagina que tienes muchas cartas desordenadas 📚. Las divides en dos montoncitos, luego otra vez, hasta que solo queda 1 carta. ¡Luego las unes ordenadamente!</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">⚙️</div>
+        <h3>Qué hace</h3>
+        <p>Divide el problema en partes pequeñas, las ordena y luego las combina. Muy eficiente para listas grandes.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🎯</div>
+        <h3>Ejemplo</h3>
+        <p><code>[5, 3, 8, 4]</code><br>División → <code>[5,3] [8,4]</code> → <code>[5][3][8][4]</code><br>Unión → <code>[3,5][4,8]</code> → <code>[3,4,5,8]</code> ✅</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🪄</div>
+        <h3>Resumen</h3>
+        <p>Divide → Ordena → Une. Es un algoritmo <strong>O(n log n)</strong> altamente eficiente.</p>
+      </div>`
   }
 };
 
