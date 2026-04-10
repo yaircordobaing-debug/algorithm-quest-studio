@@ -157,7 +157,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 
 .narrative-hud {
-  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 75px; left: 50%; transform: translateX(-50%);
   width: auto; min-width: 350px; max-width: 80%;
   padding: 14px 24px; border: 1px solid rgba(255,152,0,0.3);
   border-radius: 16px; z-index: 50; text-align: center;
@@ -171,13 +171,21 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 .playback-bar {
   padding: 16px 30px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between; gap: 30px;
+  display: flex; align-items: center; justify-content: center; /* CENTERED */
+  gap: 40px;
   background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(15px);
 }
 
-.data-input-group { display: flex; gap: 20px; flex: 1; min-width: 0; }
-.sub-input { display: flex; flex-direction: column; gap: 4px; }
-.sub-input label { font-size: 0.65rem; font-weight: 700; color: var(--txt3); text-transform: uppercase; }
+/* ── SIMULATION HEADER (NEW) ── */
+.simulation-header {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 12px 20px; z-index: 100;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: flex-start;
+}
+.data-input-group { display: flex; gap: 24px; align-items: center; }
+.sub-input { display: flex; align-items: center; gap: 10px; }
+.sub-input label { font-size: 0.65rem; font-weight: 700; color: var(--gold); text-transform: uppercase; }
 .input-flex { display: flex; gap: 6px; }
 
 .neo-input {
