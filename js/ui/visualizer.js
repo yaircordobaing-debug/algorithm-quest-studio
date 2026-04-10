@@ -4,6 +4,7 @@ class Visualizer {
             array: document.getElementById('render-array'),
             graph: document.getElementById('render-graph'),
             cartesian: document.getElementById('render-cartesian'),
+            tree: document.getElementById('render-tree'),
             board: document.getElementById('render-board')
         };
         this.chests       = [];
@@ -17,7 +18,10 @@ class Visualizer {
         
         this.cartCanvas   = document.getElementById('cartesian-canvas');
         this.cartCtx      = this.cartCanvas ? this.cartCanvas.getContext('2d') : null;
-        
+
+        this.treeCanvas   = document.getElementById('tree-canvas');
+        this.treeCtx      = this.treeCanvas ? this.treeCanvas.getContext('2d') : null;
+
         this.boardGrid    = document.getElementById('board-grid');
 
         this.narrativeText= document.getElementById('narrative-text');
@@ -80,6 +84,7 @@ class Visualizer {
         else if (r === 'graph') { this._applyGraphState(step); }
         else if (r === 'board') { this._applyBoardState(step); }
         else if (r === 'cartesian') { this._applyCartesianState(step); }
+        else if (r === 'tree') { this._applyTreeState(step); }
     }
 
     // ── ARRAY RENDERER ──
@@ -260,5 +265,75 @@ class Visualizer {
             ctx.lineTo(20 + line.x2 * (w-40), h - 20 - line.y2 * (h-40));
             ctx.stroke();
         }
+    }
+
+    _applyTreeState(state) {
+        if (!this.treeCtx) return;
+        const ctx = this.treeCtx;
+        const w = this.treeCanvas.width, h = this.treeCanvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const arr = state.array || [];
+        if (arr.length === 0) return;
+
+        const nodes = [];
+        const n = arr.length;
+        const levels = Math.ceil(Math.log2(n + 1));
+        const vSpace = h / (levels + 1);
+
+        // Calculate positions
+        for (let i = 0; i < n; i++) {
+            const level = Math.floor(Math.log2(i + 1));
+            const nodesInLevel = Math.pow(2, level);
+            const posInLevel = i - (nodesInLevel - 1);
+            const x = (w / (nodesInLevel + 1)) * (posInLevel + 1);
+            const y = (level + 1) * vSpace;
+            nodes.push({ x, y, val: arr[i] });
+        }
+
+        // Draw Edges
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; 
+        for (let i = 0; i < n; i++) {
+            const l = 2*i + 1, r = 2*i + 2;
+            if (l < n) {
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(nodes[l].x, nodes[l].y);
+                ctx.stroke();
+            }
+            if (r < n) {
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(nodes[r].x, nodes[r].y);
+                ctx.stroke();
+            }
+        }
+
+        // Draw Nodes
+        nodes.forEach((node, idx) => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 18, 0, 2*Math.PI);
+            
+            // Color logic
+            let border = '#6366f1'; // Default (Indigo)
+            let fill = '#1e1e2e'; // Surface
+            
+            if (state.stateId === 'swap' && (idx === state.low || idx === state.mid)) border = '#a855f7'; // Purple
+            if (state.stateId === 'calcMid' && idx === state.low) border = '#f59e0b'; // Amber (Root)
+            if (state.stateId === 'fixed' && idx === state.low) border = '#10b981'; // Green (Sorted)
+
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.strokeStyle = border;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px JetBrains Mono';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(node.val, node.x, node.y);
+        });
     }
 }

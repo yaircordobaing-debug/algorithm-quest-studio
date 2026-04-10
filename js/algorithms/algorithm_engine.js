@@ -380,7 +380,7 @@ class AlgorithmEngine {
     // ── Heap Sort ──
     _heapSort() {
         let arr = [...this.array], n = arr.length;
-        this._push({ stateId:'init', array:[...arr], narrative:'🌳 Heap Sort: Construyendo el árbol (Max Heap).' });
+        this._push({ stateId:'init', renderer:'tree', array:[...arr], narrative:'🌳 Heap Sort: Construyendo el árbol (Max Heap).' });
         
         // Build heap
         for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
@@ -389,23 +389,23 @@ class AlgorithmEngine {
 
         // Extract
         for (let i = n - 1; i > 0; i--) {
-            this._push({ stateId:'swap', low:0, mid:i, array:[...arr], narrative:`Moviendo la corona 👑 (${arr[0]}) al final del arreglo.` });
+            this._push({ stateId:'swap', renderer:'tree', low:0, mid:i, array:[...arr], narrative:`Moviendo la corona 👑 (${arr[0]}) al final del arreglo.` });
             [arr[0], arr[i]] = [arr[i], arr[0]];
-            this._push({ stateId:'fixed', low:i, array:[...arr], narrative:`✅ El mayor quedó en su posición final.` });
+            this._push({ stateId:'fixed', renderer:'tree', low:i, array:[...arr], narrative:`✅ El mayor quedó en su posición final.` });
             this._heapify(arr, i, 0);
         }
-        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Árbol ordenado perfectamente!' });
+        this._push({ stateId:'complete', renderer:'tree', array:[...arr], narrative:'🏆 ¡Árbol ordenado perfectamente!' });
     }
 
     _heapify(arr, n, i) {
         let largest = i, left = 2*i + 1, right = 2*i + 2;
-        this._push({ stateId:'calcMid', low:i, mid:left, high:right, array:[...arr], narrative:`Revisando nodo raíz ${arr[i]} y sus hijos.` });
+        this._push({ stateId:'calcMid', renderer:'tree', low:i, mid:left, high:right, array:[...arr], narrative:`Revisando nodo raíz ${arr[i]} y sus hijos.` });
 
         if (left < n && arr[left] > arr[largest]) largest = left;
         if (right < n && arr[right] > arr[largest]) largest = right;
 
         if (largest !== i) {
-            this._push({ stateId:'swap', low:i, mid:largest, array:[...arr], narrative:`🔄 Hijo (${arr[largest]}) es mayor que raíz (${arr[i]}). Intercambiando.` });
+            this._push({ stateId:'swap', renderer:'tree', low:i, mid:largest, array:[...arr], narrative:`🔄 Hijo (${arr[largest]}) es mayor que raíz (${arr[i]}). Intercambiando.` });
             [arr[i], arr[largest]] = [arr[largest], arr[i]];
             this._heapify(arr, n, largest);
         }
