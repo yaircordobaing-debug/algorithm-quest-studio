@@ -208,22 +208,47 @@ def selection_sort(arr):
     },
     // ── Quick Sort ──
     quick_sort: {
-        java: `// Quick Sort - Pivote
-public void quickSort(int[] arr, int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);    // izquierda
-        quickSort(arr, pi + 1, high);   // derecha
+        java: `public class QuickSort {
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
     }
-}
-// partition coloca pivote en su lugar correcto`,
-        python: `# Quick Sort
-def quick_sort(arr, low=0, high=None):
-    if high is None: high = len(arr) - 1
+
+    public static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+}`,
+        python: `def quick_sort(arr, low, high):
     if low < high:
         pi = partition(arr, low, high)
         quick_sort(arr, low, pi - 1)
-        quick_sort(arr, pi + 1, high)`
+        quick_sort(arr, pi + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] < pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1`
     },
     // ── More Advanced Sorting ──
     heap_sort: {

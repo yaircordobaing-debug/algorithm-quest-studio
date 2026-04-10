@@ -11,7 +11,19 @@ const algorithmsMetadata = {
         name: 'Bubble Sort', category: 'Sorting', complexity: 'O(n²)', space: 'O(1)',
         theory: '<h3>Bubble Sort</h3><p>Compara pares adyacentes. Los valores mayores "burbujean" hacia el final en cada pasada.</p>'
     },
-    'quick_sort':     { name: 'Quick Sort',     category: 'Sorting',   complexity: 'O(n log n)', space: 'O(log n)' },
+    'quick_sort': {
+        name: 'Quick Sort',
+        category: 'Sorting',
+        complexity: 'O(n log n)',
+        space: 'O(log n)',
+        theory: '<h3>🚀 Quick Sort (Dummies)</h3><p>Imagina una fila de números. Escoges a uno como "líder" (pivote). Los menores van a la izquierda y los mayores a la derecha. ¡Repites y listo!</p>',
+        steps: [
+            "Escoge el último elemento como pivote",
+            "Mueve los menores a la izquierda",
+            "Coloca el pivote en su lugar correcto",
+            "Repite recursivamente"
+        ]
+    },
     'merge_sort': {
         name: 'Merge Sort', 
         category: 'Sorting', 

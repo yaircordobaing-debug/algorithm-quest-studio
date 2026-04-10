@@ -19,6 +19,7 @@ class AlgorithmEngine {
         else if (t === 'selection_sort')           this._selectionSort();
         else if (t === 'dfs')                      this._dfs();
         else if (t === 'linear_reg')               this._linearReg();
+        else if (t === 'quick_sort')               this._quickSort();
         else if (t === 'backtracking')             this._nQueens();
         else if (t === 'merge_sort')               this._mergeSort();
         else {
@@ -331,5 +332,47 @@ class AlgorithmEngine {
         
         this._push({ stateId:'fixed', low:l, high:r, array:[...arr], 
             narrative:`✅ Grupo entre ${l} y ${r} ha sido unido y ordenado.` });
+    }
+
+    // ── Quick Sort (Recursive with Steps) ──
+    _quickSort() {
+        let arr = [...this.array];
+        this._push({ stateId:'init', array:[...arr], narrative:'🚀 Quick Sort: ¡Buscando al Líder (Pivote)!' });
+        this._quickSortRec(arr, 0, arr.length - 1);
+        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Todo ordenado gracias a los pivotes!' });
+    }
+
+    _quickSortRec(arr, low, high) {
+        if (low < high) {
+            let pi = this._partition(arr, low, high);
+            this._quickSortRec(arr, low, pi - 1);
+            this._quickSortRec(arr, pi + 1, high);
+        }
+    }
+
+    _partition(arr, low, high) {
+        let pivot = arr[high];
+        this._push({ stateId:'init', low:high, array:[...arr], 
+            narrative:`🎯 Elegimos ${pivot} como líder (Pivote) del grupo de ${low} a ${high}.` });
+        
+        let i = low - 1;
+        for (let j = low; j < high; j++) {
+            this.comparisons++;
+            this._push({ stateId:'checkMatch', low:j, mid:high, array:[...arr], ops:this.comparisons,
+                narrative:`¿${arr[j]} es menor que el líder ${pivot}?` });
+            
+            if (arr[j] < pivot) {
+                i++;
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+                this._push({ stateId:'swap', low:i, mid:j, array:[...arr], 
+                    narrative:`🔄 ${arr[i]} es menor, lo movemos a la zona de la izquierda.` });
+            }
+        }
+        
+        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+        this._push({ stateId:'fixed', low:i+1, array:[...arr], 
+            narrative:`✅ Colocamos al líder ${pivot} en su lugar correcto (pos ${i+1}).` });
+        
+        return i + 1;
     }
 }

@@ -166,6 +166,31 @@ const ALGO_CONFIG = {
         <h3>Resumen</h3>
         <p>Divide → Ordena → Une. Es un algoritmo <strong>O(n log n)</strong> altamente eficiente.</p>
       </div>`
+  },
+  quick_sort: {
+    engineKey: 'quick_sort',
+    variants: [{ value:'quick_sort', label:'Recursivo' }],
+    theory: `
+      <div class="theory-section">
+        <div class="theory-icon">🧠</div>
+        <h3>Explicación Sencilla</h3>
+        <p>Imagina una fila de números 🎯. Escoges uno como “líder” (pivote). Los menores van a la izquierda y los mayores a la derecha. ¡Haces lo mismo con cada grupo!</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">⚙️</div>
+        <h3>Qué hace</h3>
+        <p>Divide el arreglo usando un pivote y ordena cada lado por separado. Es extremadamente rápido en la práctica.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🎯</div>
+        <h3>Ejemplo</h3>
+        <p>Pivote: 4 en <code>[5, 3, 8, 4]</code><br>Partición → <code>[3] 4 [5, 8]</code><br>Ordenado → <code>[3, 4, 5, 8]</code> ✅</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🪄</div>
+        <h3>Resumen</h3>
+        <p>Divide por pivote → ordena lados. Muy usado en sistemas reales por su eficiencia <strong>O(n log n)</strong>.</p>
+      </div>`
   }
 };
 
@@ -202,7 +227,7 @@ const CATEGORIES = {
       { id:'insertion_sort', title:'Insertion Sort', desc:'Como ordenar cartas: inserta cada elemento en su lugar correcto.', complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
       { id:'selection_sort', title:'Selection Sort', desc:'Selecciona el mínimo y lo pone al principio, una y otra vez.',     complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
       { id:'merge_sort',     title:'Merge Sort',     desc:'🚀 Divide y vencerás. Muy eficiente: O(n log n). Top en entrevistas.', complexity:'O(n log n)',space:'O(n)', difficulty:'medium', tag:'sort', available:true },
-      { id:'quick_sort',     title:'Quick Sort',     desc:'Elige un pivote y pone menores a la izquierda, mayores a la derecha.', complexity:'O(n log n)',space:'O(log n)', difficulty:'medium', tag:'sort', available:true },
+      { id:'quick_sort',     title:'Quick Sort',     desc:'🚀 El rey de la práctica. Divide por pivote. Complejidad promedio: O(n log n).', complexity:'O(n log n)',space:'O(log n)', difficulty:'medium', tag:'sort', available:true },
       { id:'heap_sort',      title:'Heap Sort',      desc:'Usa una estructura de árbol (heap) para extraer el máximo.',       complexity:'O(n log n)',space:'O(1)', difficulty:'hard',   tag:'sort', available:true },
       { id:'radix_sort',     title:'Radix Sort',     desc:'Ordena dígito a dígito: unidades, decenas, centenas...',           complexity:'O(nk)',     space:'O(n+k)', difficulty:'medium', tag:'sort', available:true },
       { id:'counting_sort',  title:'Counting Sort',  desc:'Cuenta cuántas veces aparece cada número y los reconstruye.',      complexity:'O(n+k)',    space:'O(k)', difficulty:'easy',   tag:'sort', available:true },

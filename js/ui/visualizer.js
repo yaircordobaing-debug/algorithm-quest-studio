@@ -145,14 +145,20 @@ class Visualizer {
         }
 
         if (isSort) {
-            if (state.stateId === 'fixed' && state.high != null) {
-                for (let k = state.high; k < this.chests.length; k++) {
-                    if (this.chests[k]) this.chests[k].classList.add('sorted');
-                }
+            // Quick Sort pivot high
+            if (type === 'quick_sort' && state.stateId === 'init' && state.low != null) {
+                if (this.chests[state.low]) this.chests[state.low].classList.add('active');
             }
-            if (state.stateId === 'fixed' && state.low != null) {
-                for (let k = 0; k <= state.low; k++) {
-                    if (this.chests[k]) this.chests[k].classList.add('sorted');
+
+            if (state.stateId === 'fixed') {
+                if (state.low != null && state.high != null) {
+                    const isBubble = type.includes('bubble');
+                    const start = isBubble ? state.high : state.low;
+                    for (let k = start; k < (isBubble ? this.chests.length : state.high + 1); k++) {
+                        if (this.chests[k]) this.chests[k].classList.add('sorted');
+                    }
+                } else if (state.low != null) {
+                   if (this.chests[state.low]) this.chests[state.low].classList.add('sorted');
                 }
             }
             if (state.stateId === 'complete') {
