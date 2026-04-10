@@ -1,0 +1,30 @@
+name: GitHub Pages & CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check HTML consistency
+        run: |
+          # Basic check to ensure required folders exist
+          test -d css && test -d js || (echo "Missing core folders" && exit 1)
+          # Check for index.html
+          test -f index.html || (echo "Missing index.html" && exit 1)
+          echo "Structure validated successfully."
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to GitHub Pages
+        # This is a placeholder for actual deployment steps if using gh-pages
+        run: echo "Ready for deployment to GitHub Pages"

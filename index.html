@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithm Quest Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- DASHBOARD VIEW -->
+<div id="view-dashboard" class="view active">
+  <aside class="sidebar">
+    <div class="logo-area">
+      <div class="logo-icon">AQ</div>
+      <div class="logo-text">Algorithm<br><span>Quest Studio</span></div>
+    </div>
+    <nav>
+      <p class="nav-label">CATEGORÍAS</p>
+      <button class="nav-btn active" data-cat="search">🔍 Búsqueda</button>
+      <button class="nav-btn" data-cat="sort">↕ Ordenamiento</button>
+      <button class="nav-btn" data-cat="graph">🕸 Grafos</button>
+      <button class="nav-btn" data-cat="ml">🤖 Machine Learning</button>
+      <button class="nav-btn" data-cat="opt">⚙ Optimización</button>
+      <button class="nav-btn" data-cat="crypto">🔐 Criptografía</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="progress-label">Progreso de aprendizaje</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:8%"></div></div>
+      <div class="progress-text">2 / 25 algoritmos</div>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <header class="dash-header">
+      <div>
+        <h1 id="cat-title">Algoritmos de Búsqueda</h1>
+        <p id="cat-subtitle">Técnicas para localizar elementos en estructuras de datos</p>
+      </div>
+    </header>
+    <div id="cards-grid" class="cards-grid"></div>
+  </main>
+</div>
+
+<!-- EXPLORER VIEW -->
+<div id="view-explorer" class="view">
+  <div class="explorer-wrap">
+    <header class="explorer-bar">
+      <button id="btn-back" class="back-btn">← Dashboard</button>
+      <div class="explorer-breadcrumb" id="exp-breadcrumb">Búsqueda > Linear Search</div>
+      <div class="exp-bar-right">
+        <span id="exp-ops" class="ops-chip">0 operaciones</span>
+        <span id="exp-complexity" class="complexity-chip">O(?)</span>
+      </div>
+    </header>
+
+    <div class="explorer-body">
+      <!-- LEFT: Theory -->
+      <aside class="theory-panel">
+        <h2 id="theory-title">Nombre</h2>
+        <div id="theory-body" class="theory-body"></div>
+        <div class="complexity-row">
+          <div class="stat-box"><span class="stat-label">Complejidad</span><span class="stat-val" id="th-complexity">-</span></div>
+          <div class="stat-box"><span class="stat-label">Espacio</span><span class="stat-val" id="th-space">O(1)</span></div>
+          <div class="stat-box"><span class="stat-label">Categoría</span><span class="stat-val" id="th-cat">-</span></div>
+        </div>
+      </aside>
+
+      <!-- RIGHT: Visualization -->
+      <section class="viz-panel">
+        <!-- Code Tabs -->
+        <div class="code-tabs">
+          <button class="tab-btn active" data-lang="java">Java</button>
+          <button class="tab-btn" data-lang="python">Python</button>
+          <select id="select-algo" class="algo-select"></select>
+        </div>
+        <div id="code-display" class="code-display"></div>
+
+        <!-- Canvas Base -->
+        <div class="viz-canvas" id="viz-canvas" style="position:relative; flex-direction:column;">
+          
+          <!-- ARRAY RENDERER -->
+          <div id="render-array" class="renderer-layer active">
+            <div id="ptr-row" class="ptr-row">
+              <div id="ptr-low"  class="ptr ptr-l" style="display:none">▼<span>L</span></div>
+              <div id="ptr-mid"  class="ptr ptr-m" style="display:none">▼<span>M</span></div>
+              <div id="ptr-high" class="ptr ptr-h" style="display:none">▼<span>H</span></div>
+            </div>
+            <div id="chest-row" class="chest-row"></div>
+          </div>
+
+          <!-- GRAPH RENDERER -->
+          <div id="render-graph" class="renderer-layer">
+            <canvas id="graph-canvas" width="600" height="280"></canvas>
+          </div>
+
+          <!-- CARTESIAN RENDERER -->
+          <div id="render-cartesian" class="renderer-layer">
+            <canvas id="cartesian-canvas" width="600" height="280"></canvas>
+          </div>
+
+          <!-- BOARD RENDERER -->
+          <div id="render-board" class="renderer-layer">
+            <div id="board-grid" class="board-grid"></div>
+          </div>
+
+          <div id="narrative-box" class="narrative-box">
+            <p id="narrative-text">Selecciona un valor y presiona ▶ Iniciar.</p>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+          <div class="target-group" id="input-group">
+            <label>Input:</label>
+            <input id="input-target" type="number" value="42" class="target-input">
+          </div>
+          <div class="btn-group">
+            <button id="btn-prev"  class="ctrl-btn secondary" disabled>⏮ Ant</button>
+            <button id="btn-play"  class="ctrl-btn primary">▶ Reproducir</button>
+            <button id="btn-next"  class="ctrl-btn secondary" disabled>Sig ⏭</button>
+            <button id="btn-reset" class="ctrl-btn secondary">↺</button>
+          </div>
+          <div class="speed-group">
+            <label>Velocidad:</label>
+            <input type="range" id="speed-slider" min="1" max="5" value="3">
+          </div>
+          <div class="step-info">Paso <span id="step-idx">0</span>/<span id="step-tot">0</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="js/data/snippets.js"></script>
+<script src="js/data/algorithms_metadata.js"></script>
+<script src="js/algorithms/algorithm_engine.js"></script>
+<script src="js/ui/visualizer.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

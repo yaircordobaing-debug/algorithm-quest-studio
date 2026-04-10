@@ -1,0 +1,54 @@
+/* Mobile First Layout */
+.app-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+}
+
+.animation-container {
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-container {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--code-bg);
+    border-top: 4px solid var(--accent);
+}
+
+/* Tablet & Desktop Layout */
+@media (min-width: 768px) {
+    body {
+        font-size: 11px;
+        height: 100vh;
+        overflow: hidden; /* Cortar scroll global en PC */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .app-header {
+        flex: 0 0 auto;
+        padding-bottom: 5px;
+    }
+
+    .app-container {
+        flex: 1 1 auto;
+        flex-direction: row; 
+        overflow: hidden; /* El contenido interno hace el scroll si es vital */
+    }
+
+    .animation-container {
+        flex: 0 0 65%; 
+        border-right: 4px solid var(--accent); 
+        overflow-y: auto; 
+    }
+
+    .code-container {
+        flex: 0 0 35%; 
+        border-top: none;
+        overflow-y: auto; 
+    }
+}
