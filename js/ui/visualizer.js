@@ -29,6 +29,8 @@ class Visualizer {
         this.radixMain    = document.getElementById('radix-main-row');
         this.radixBuckets = document.getElementById('radix-buckets');
 
+        this.heapArrayRow = document.getElementById('heap-array-row');
+
         this.narrativeText= document.getElementById('narrative-text');
         this.codeDisplay  = document.getElementById('code-display');
         this.currentLang  = 'java';
@@ -303,12 +305,26 @@ class Visualizer {
         const arr = state.array || [];
         if (arr.length === 0) return;
 
+        // 1. Render Mini Array boxes below
+        if (this.heapArrayRow) {
+            this.heapArrayRow.innerHTML = '';
+            arr.forEach((val, idx) => {
+                const el = document.createElement('div');
+                el.className = 'chest';
+                el.textContent = val;
+                if (state.stateId === 'swap' && (idx === state.low || idx === state.mid)) el.classList.add('swap-hi');
+                if (state.stateId === 'fixed' && idx >= state.low) el.classList.add('sorted');
+                if (state.stateId === 'complete') el.classList.add('sorted');
+                this.heapArrayRow.appendChild(el);
+            });
+        }
+
+        // 2. Render Binary Tree
         const nodes = [];
         const n = arr.length;
         const levels = Math.ceil(Math.log2(n + 1));
         const vSpace = h / (levels + 1);
 
-        // Calculate positions
         for (let i = 0; i < n; i++) {
             const level = Math.floor(Math.log2(i + 1));
             const nodesInLevel = Math.pow(2, level);
@@ -318,45 +334,56 @@ class Visualizer {
             nodes.push({ x, y, val: arr[i] });
         }
 
-        // Draw Edges
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; 
+        // Draw Edges with glow effect
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'; 
         for (let i = 0; i < n; i++) {
             const l = 2*i + 1, r = 2*i + 2;
-            if (l < n) {
-                ctx.beginPath();
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(nodes[l].x, nodes[l].y);
-                ctx.stroke();
-            }
-            if (r < n) {
-                ctx.beginPath();
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(nodes[r].x, nodes[r].y);
-                ctx.stroke();
-            }
+            [l, r].forEach(child => {
+                if (child < n) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[child].x, nodes[child].y);
+                    ctx.stroke();
+                }
+            });
         }
 
         // Draw Nodes
         nodes.forEach((node, idx) => {
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 18, 0, 2*Math.PI);
+            ctx.arc(node.x, node.y, 22, 0, 2*Math.PI);
             
-            // Color logic
-            let border = '#6366f1'; // Default (Indigo)
-            let fill = '#1e1e2e'; // Surface
-            
-            if (state.stateId === 'swap' && (idx === state.low || idx === state.mid)) border = '#a855f7'; // Purple
-            if (state.stateId === 'calcMid' && idx === state.low) border = '#f59e0b'; // Amber (Root)
-            if (state.stateId === 'fixed' && idx === state.low) border = '#10b981'; // Green (Sorted)
+            let border = 'rgba(255,152,0,0.3)';
+            let fill = 'rgba(15, 23, 42, 0.8)';
+            let text = '#fff';
+
+            if (state.stateId === 'swap' && (idx === state.low || idx === state.mid)) {
+                border = 'var(--accent)';
+                fill = 'rgba(255,152,0,0.3)';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'var(--accent)';
+            }
+            if (state.stateId === 'fixed' && (idx === state.low || (idx >= state.low && state.stateId === 'fixed'))) {
+                if (idx >= state.low) {
+                    border = 'var(--txt3)';
+                    fill = 'rgba(100,116,139,0.1)';
+                    text = 'var(--txt3)';
+                }
+            }
+            if (state.stateId === 'calcMid' && idx === state.low) {
+                border = 'var(--gold)';
+                fill = 'rgba(255,204,0,0.1)';
+            }
 
             ctx.fillStyle = fill;
             ctx.fill();
             ctx.strokeStyle = border;
             ctx.lineWidth = 3;
             ctx.stroke();
+            ctx.shadowBlur = 0;
 
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = text;
             ctx.font = 'bold 12px JetBrains Mono';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
