@@ -380,7 +380,7 @@ class AlgorithmEngine {
     // ── Heap Sort ──
     _heapSort() {
         let arr = [...this.array], n = arr.length;
-        this._push({ stateId:'init', renderer:'tree', array:[...arr], narrative:'🌳 Heap Sort: Construyendo el árbol (Max Heap).' });
+        this._push({ stateId:'init', renderer:'tree', array:[...arr], narrative:'🌳 **Heap Sort**: Iniciamos construyendo el **Max-Heap**. El objetivo es que el mayor siempre esté arriba.' });
         
         // Build heap
         for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
@@ -389,23 +389,23 @@ class AlgorithmEngine {
 
         // Extract
         for (let i = n - 1; i > 0; i--) {
-            this._push({ stateId:'swap', renderer:'tree', low:0, mid:i, array:[...arr], narrative:`Moviendo la corona 👑 (${arr[0]}) al final del arreglo.` });
+            this._push({ stateId:'swap', renderer:'tree', low:0, mid:i, array:[...arr], narrative: `Extrayendo la corona 👑 **${arr[0]}** y moviéndola al final (posición ${i}).` });
             [arr[0], arr[i]] = [arr[i], arr[0]];
-            this._push({ stateId:'fixed', renderer:'tree', low:i, array:[...arr], narrative:`✅ El mayor quedó en su posición final.` });
+            this._push({ stateId:'fixed', renderer:'tree', low:i, array:[...arr], narrative:`✅ **${arr[i]}** ya está en su posición final correctamente ordenada.` });
             this._heapify(arr, i, 0);
         }
-        this._push({ stateId:'complete', renderer:'tree', array:[...arr], narrative:'🏆 ¡Árbol ordenado perfectamente!' });
+        this._push({ stateId:'complete', renderer:'tree', array:[...arr], narrative:'🏆 **¡Ordenamiento completado!** Toda la estructura se ha procesado con éxito.' });
     }
 
     _heapify(arr, n, i) {
         let largest = i, left = 2*i + 1, right = 2*i + 2;
-        this._push({ stateId:'calcMid', renderer:'tree', low:i, mid:left, high:right, array:[...arr], narrative:`Revisando nodo raíz ${arr[i]} y sus hijos.` });
+        this._push({ stateId:'calcMid', renderer:'tree', low:i, mid:left, high:right, array:[...arr], narrative:`Comparando raíz **${arr[i]}** con sus hijos (**${left < n ? arr[left] : '-'}** y **${right < n ? arr[right] : '-'}**).` });
 
         if (left < n && arr[left] > arr[largest]) largest = left;
         if (right < n && arr[right] > arr[largest]) largest = right;
 
         if (largest !== i) {
-            this._push({ stateId:'swap', renderer:'tree', low:i, mid:largest, array:[...arr], narrative:`🔄 Hijo (${arr[largest]}) es mayor que raíz (${arr[i]}). Intercambiando.` });
+            this._push({ stateId:'swap', renderer:'tree', low:i, mid:largest, array:[...arr], narrative:`El hijo **${arr[largest]}** es mayor que la raíz **${arr[i]}**. **¡Intercambiamos!**` });
             [arr[i], arr[largest]] = [arr[largest], arr[i]];
             this._heapify(arr, n, largest);
         }
@@ -413,30 +413,57 @@ class AlgorithmEngine {
 
     // ── Radix Sort ──
     _radixSort() {
-        let arr = [...this.array];
+        let arr = [...this.array], n = arr.length;
+        if (n === 0) return;
         let max = Math.max(...arr);
-        this._push({ stateId:'init', array:[...arr], narrative:'🔢 Radix Sort: Iniciamos el ordenamiento por dígitos.' });
+
+        this._push({ stateId:'init', renderer:'radix', array:[...arr], narrative:'🔢 **Radix Sort**: Iniciamos analizando los números por dígitos (Unidades → Decenas → Centenas).' });
 
         for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
-            this._push({ stateId:'calcMid', array:[...arr], narrative: `Ordenando por el dígito de las ${exp === 1 ? 'Unidades' : exp === 10 ? 'Decenas' : 'Centenas'}.` });
-            this._countSortForRadix(arr, exp);
-            this._push({ stateId:'fixed', array:[...arr], narrative: `✅ Ronda terminada para el dígito ${exp}.` });
-        }
-        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Radix Sort completado! Números ordenados por partes.' });
-    }
+            let buckets = Array.from({ length: 10 }, () => []);
+            let passType = exp === 1 ? 'unidades' : exp === 10 ? 'decenas' : 'centenas';
 
-    _countSortForRadix(arr, exp) {
-        let n = arr.length, output = new Array(n), count = new Array(10).fill(0);
-        for (let i = 0; i < n; i++) count[Math.floor(arr[i] / exp) % 10]++;
-        for (let i = 1; i < 10; i++) count[i] += count[i - 1];
+            // 1. Fase de Distribución (A los buckets)
+            for (let i = 0; i < n; i++) {
+                let digit = Math.floor(arr[i] / exp) % 10;
+                buckets[digit].push(arr[i]);
+                
+                this._push({
+                    stateId: 'calcMid',
+                    renderer: 'radix',
+                    array: [...arr],
+                    data: { 
+                        buckets: JSON.parse(JSON.stringify(buckets)), 
+                        exp: exp, 
+                        activeIdx: i,
+                        phase: 'distribute'
+                    },
+                    narrative: `Digit **${passType}**: Moviendo **${arr[i]}** al slot **${digit}**.`
+                });
+            }
 
-        for (let i = n - 1; i >= 0; i--) {
-            let digit = Math.floor(arr[i] / exp) % 10;
-            output[count[digit] - 1] = arr[i];
-            count[digit]--;
-            // Narrative step for placing
-            this._push({ stateId:'checkMatch', low:i, array:[...output], narrative: `Colocando ${arr[i]} en su nueva posición basada en el dígito.` });
+            // 2. Fase de Recolección (Al arreglo)
+            let index = 0;
+            for (let b = 0; b < 10; b++) {
+                while (buckets[b].length > 0) {
+                    let val = buckets[b].shift();
+                    arr[index++] = val;
+
+                    this._push({
+                        stateId: 'swap',
+                        renderer: 'radix',
+                        array: [...arr],
+                        data: { 
+                            buckets: JSON.parse(JSON.stringify(buckets)), 
+                            exp: exp, 
+                            activeIdx: index - 1,
+                            phase: 'collect'
+                        },
+                        narrative: `Recolectando: Colocando **${val}** de vuelta en el arreglo principal desde el slot **${b}**.`
+                    });
+                }
+            }
         }
-        for (let i = 0; i < n; i++) arr[i] = output[i];
+        this._push({ stateId:'complete', renderer:'radix', array:[...arr], narrative:'🏆 **Radix Sort Finalizado**: Los números están perfectamente ordenados.' });
     }
 }

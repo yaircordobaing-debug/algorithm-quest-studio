@@ -105,6 +105,14 @@
             <canvas id="tree-canvas" width="600" height="280"></canvas>
           </div>
 
+          <!-- RADIX RENDERER (BUCKETS) -->
+          <div id="render-radix" class="renderer-layer">
+            <div id="radix-main-row" class="chest-row-radix"></div>
+            <div id="radix-buckets" class="radix-buckets-container">
+              <!-- JS will fill 10 buckets here -->
+            </div>
+          </div>
+
           <!-- BOARD RENDERER -->
           <div id="render-board" class="renderer-layer">
             <div id="board-grid" class="board-grid"></div>
@@ -117,9 +125,18 @@
 
         <!-- Controls -->
         <div class="controls-bar">
-          <div class="target-group" id="input-group">
-            <label>Input:</label>
-            <input id="input-target" type="number" value="42" class="target-input">
+          <div class="input-group-container" id="input-group">
+            <div class="input-subgroup">
+              <label>Datos:</label>
+              <div class="input-with-action">
+                <input id="input-data" type="text" value="4, 8, 15, 16, 23, 42, 55, 67, 89" class="target-input">
+                <button id="btn-shuffle" class="ctrl-btn secondary" title="Aleatorio">🎲</button>
+              </div>
+            </div>
+            <div class="input-subgroup" id="search-target-wrap">
+              <label>Objetivo:</label>
+              <input id="input-target" type="number" value="42" class="target-input">
+            </div>
           </div>
           <div class="btn-group">
             <button id="btn-prev"  class="ctrl-btn secondary" disabled>⏮ Ant</button>

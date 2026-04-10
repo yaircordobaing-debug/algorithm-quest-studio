@@ -462,7 +462,23 @@ function initExplorer(algoId) {
   visualizer.currentAlgo = sel.value;
   visualizer.currentLang = 'java';
   visualizer.renderCode('java', sel.value);
-  visualizer.renderChests([4, 8, 15, 16, 23, 42, 55, 67, 89]);
+
+  updateInputVisibility(algoId);
+  const initialData = getParsedData();
+  visualizer.renderChests(initialData);
+}
+
+function updateInputVisibility(algoId) {
+  const wrap = document.getElementById('search-target-wrap');
+  if (!wrap) return;
+  const isSearch = algoId.includes('search') || algoId.includes('dfs') || algoId.includes('bfs');
+  wrap.style.display = isSearch ? 'flex' : 'none';
+}
+
+function getParsedData() {
+  const raw = document.getElementById('input-data').value;
+  // Basic parsing for arrays: comma or space separated
+  return raw.split(/[\s,]+/).filter(x => x !== "").map(Number);
 }
 
 let playInterval = null;
@@ -480,7 +496,8 @@ function resetExplorer() {
   document.getElementById('step-idx').textContent = '0';
   document.getElementById('step-tot').textContent = '0';
   if (visualizer) {
-    visualizer.renderChests([4, 8, 15, 16, 23, 42, 55, 67, 89]);
+    const currentData = getParsedData();
+    visualizer.renderChests(currentData);
     const nt = document.getElementById('narrative-text');
     if (nt) nt.textContent = 'Selecciona un valor y presiona ▶ Reproducir.';
     ['ptr-low','ptr-mid','ptr-high'].forEach(id => {
@@ -563,8 +580,9 @@ document.getElementById('btn-play').addEventListener('click', () => {
   if (steps.length === 0) {
     const target = parseInt(document.getElementById('input-target').value) || 42;
     const algoKey = document.getElementById('select-algo').value;
+    const currentData = getParsedData();
     if (visualizer) visualizer.currentAlgo = algoKey;
-    engine = new AlgorithmEngine([4,8,15,16,23,42,55,67,89], target);
+    engine = new AlgorithmEngine(currentData, target);
     steps  = engine.generateSteps(algoKey);
     document.getElementById('step-tot').textContent = steps.length;
     stepIndex = 0;
@@ -596,6 +614,16 @@ document.getElementById('speed-slider').addEventListener('input', () => {
       playPlayback(); // restart interval with new delay
   }
 });
+
+document.getElementById('btn-shuffle').addEventListener('click', () => {
+  const count = 8;
+  const randomArr = Array.from({ length: count }, () => Math.floor(Math.random() * 90) + 10);
+  document.getElementById('input-data').value = randomArr.join(', ');
+  resetExplorer();
+});
+
+document.getElementById('input-data').addEventListener('change', () => resetExplorer());
+document.getElementById('input-target').addEventListener('change', () => resetExplorer());
 
 // ─────────────────── BOOT ───────────────────
 createModal();

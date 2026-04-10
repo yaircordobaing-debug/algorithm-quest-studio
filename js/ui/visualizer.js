@@ -5,6 +5,7 @@ class Visualizer {
             graph: document.getElementById('render-graph'),
             cartesian: document.getElementById('render-cartesian'),
             tree: document.getElementById('render-tree'),
+            radix: document.getElementById('render-radix'),
             board: document.getElementById('render-board')
         };
         this.chests       = [];
@@ -23,6 +24,10 @@ class Visualizer {
         this.treeCtx      = this.treeCanvas ? this.treeCanvas.getContext('2d') : null;
 
         this.boardGrid    = document.getElementById('board-grid');
+
+        this.radixLayer   = document.getElementById('render-radix');
+        this.radixMain    = document.getElementById('radix-main-row');
+        this.radixBuckets = document.getElementById('radix-buckets');
 
         this.narrativeText= document.getElementById('narrative-text');
         this.codeDisplay  = document.getElementById('code-display');
@@ -89,17 +94,32 @@ class Visualizer {
         else if (r === 'board') { this._applyBoardState(step); }
         else if (r === 'cartesian') { this._applyCartesianState(step); }
         else if (r === 'tree') { this._applyTreeState(step); }
+        else if (r === 'radix') { this._applyRadixState(step); }
     }
 
     // ── ARRAY RENDERER ──
     renderChests(array) {
         this.chestRow.innerHTML = '';
         this.chests = [];
+        this.chestRow.style.position = 'relative';
+        this.chestRow.style.height = '60px';
+        this.chestRow.style.width = '100%';
+        this.chestRow.style.maxWidth = '700px';
+
+        const itemWidth = 52;
+        const gap = 12;
+        const totalW = array.length * itemWidth + (array.length - 1) * gap;
+        let startX = (this.chestRow.offsetWidth - totalW) / 2;
+        if (startX < 0) startX = 0;
+
         array.forEach((val, idx) => {
             const el = document.createElement('div');
             el.className = 'chest';
             el.id = `chest-${idx}`;
             el.textContent = val;
+            el.style.position = 'absolute';
+            el.style.left = (startX + idx * (itemWidth + gap)) + 'px';
+            el.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             this.chestRow.appendChild(el);
             this.chests.push(el);
         });
@@ -108,9 +128,7 @@ class Visualizer {
 
     _getLeft(index) {
         if (index < 0 || index >= this.chests.length) return -999;
-        const cr = this.chestRow.getBoundingClientRect();
-        const er = this.chests[index].getBoundingClientRect();
-        return (er.left - cr.left) + er.width / 2;
+        return parseFloat(this.chests[index].style.left) + 26; // 26 is half width
     }
 
     _applyArrayState(state) {
@@ -132,7 +150,12 @@ class Visualizer {
 
         this.chests.forEach((ch, idx) => {
             ch.classList.remove('active', 'inactive', 'found', 'sorted', 'swap-hi');
-            ch.style.border = '';
+            
+            // Update value if changed (for Radix Sort or complex swaps)
+            if (state.array && state.array[idx] !== undefined) {
+                ch.textContent = state.array[idx];
+            }
+
             if (isBinary) {
                 if (state.low  != null && idx < state.low)  ch.classList.add('inactive');
                 if (state.high != null && idx > state.high) ch.classList.add('inactive');
@@ -339,5 +362,64 @@ class Visualizer {
             ctx.textBaseline = 'middle';
             ctx.fillText(node.val, node.x, node.y);
         });
+    }
+
+    _applyRadixState(state) {
+        if (!this.radixLayer) return;
+        
+        // Setup internal buckets if empty
+        if (this.radixBuckets.innerHTML.trim() === '') {
+            for (let i = 0; i < 10; i++) {
+                const b = document.createElement('div');
+                b.className = 'radix-bucket';
+                b.id = `bucket-${i}`;
+                b.setAttribute('data-label', i);
+                this.radixBuckets.appendChild(b);
+            }
+        }
+
+        // Main Row (top array)
+        this.radixMain.innerHTML = '';
+        const arr = state.array || [];
+        arr.forEach((val, idx) => {
+            const ch = document.createElement('div');
+            ch.className = 'chest radix-item';
+            // Highlight if we are collecting/distributing this index
+            const data = state.data || {};
+            if (data.activeIdx === idx) ch.classList.add('active');
+            
+            ch.innerHTML = this._formatRadixValue(val, data.exp);
+            this.radixMain.appendChild(ch);
+        });
+
+        // Buckets
+        const buckets = state.data?.buckets || [];
+        for (let i = 0; i < 10; i++) {
+            const bDiv = document.getElementById(`bucket-${i}`);
+            if (bDiv) {
+                bDiv.innerHTML = '';
+                const items = buckets[i] || [];
+                items.forEach(val => {
+                    const item = document.createElement('div');
+                    item.className = 'chest radix-item';
+                    item.innerHTML = this._formatRadixValue(val, state.data?.exp);
+                    bDiv.appendChild(item);
+                });
+            }
+        }
+    }
+
+    _formatRadixValue(val, exp) {
+        if (!exp) return val;
+        const s = val.toString();
+        // Calculate digit position from right (1=last, 10=second last, etc.)
+        const power = Math.round(Math.log10(exp));
+        const idx = s.length - 1 - power;
+        
+        if (idx < 0 || idx >= s.length) return val;
+        
+        const chars = s.split('');
+        chars[idx] = `<span class="digit-active">${chars[idx]}</span>`;
+        return chars.join('');
     }
 }
