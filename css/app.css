@@ -190,9 +190,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 .playback-controls { display: flex; gap: 8px; }
 .p-btn {
-  width: 44px; height: 44px; border-radius: 12px; border: none; font-size: 1.1rem;
+  min-width: 44px; width: auto; padding: 0 16px; height: 44px; 
+  border-radius: 12px; border: none; font-size: 0.85rem; font-weight: 600;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+  gap: 8px; transition: all 0.2s;
 }
 .p-btn.primary-glow {
   background: var(--accent); color: #000;
@@ -205,10 +206,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .neo-range { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; accent-color: var(--accent); }
 .playback-info { font-family: var(--mono); font-size: 0.8rem; color: var(--txt3); white-space: nowrap; }
 
+/* ── STEP MODAL (DURING SIMULATION) ── */
+#step-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px); z-index: 2000;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+#step-modal.active { display: flex; }
+
+.modal-box {
+  background: var(--surface); border: 1px solid var(--accent);
+  padding: 30px; border-radius: 20px; max-width: 450px; width: 100%;
+  text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-icon { font-size: 3rem; margin-bottom: 15px; }
+.modal-body { color: var(--txt2); font-size: 0.95rem; line-height: 1.6; }
+
 /* ── INTRO MODAL ── */
 .intro-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(8px); z-index: 1000;
+  backdrop-filter: blur(10px); z-index: 1000;
   display: none; align-items: center; justify-content: center; padding: 20px;
 }
 .intro-overlay.active { display: flex; }

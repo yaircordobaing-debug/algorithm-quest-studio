@@ -34,37 +34,37 @@ class AlgorithmEngine {
     // ── Linear Search ──
     _linearIter() {
         this._push({ stateId:'init', low:0, high:null, mid:null, ops:0,
-            narrative: `🚀 Iniciando Búsqueda Lineal. Nota importante: ¡En programación, los arreglos siempre inician en la posición 0!` });
+            narrative: `🚀 ¡Vamos a buscar el número ${this.target}! Empezaremos revisando caja por caja desde la primera (posición 0).` });
         for (let i = 0; i < this.array.length; i++) {
             this.comparisons++;
             this._push({ stateId:'checkMatch', low:i, high:null, mid:i, ops:this.comparisons,
-                narrative:`Posición ${i}: ¿el valor ${this.array[i]} es igual a ${this.target}?` });
+                narrative:`Revisando la caja ${i}: ¿el número ${this.array[i]} es el que buscamos?` });
             if (this.array[i] === this.target) {
                 this._push({ stateId:'found', low:i, high:null, mid:i, ops:this.comparisons,
-                    narrative:`¡✅ Encontrado! El valor ${this.target} está en la posición ${i}. Total de pasos: ${this.comparisons}` });
+                    narrative:`¡LO ENCONTRÉ! 🎉 El número ${this.target} estaba escondido en la caja ${i}. Solo me tomó ${this.comparisons} pasos.` });
                 return;
             }
         }
         this._push({ stateId:'notFound', low:null, high:null, mid:null, ops:this.comparisons,
-            narrative:`😢 No encontrado. Revisé todo el arreglo y el elemento no existe.` });
+            narrative:`😢 ¡Uf! Ya revisé todas las cajas y el número ${this.target} no está por ningún lado. ¡Búsqueda finalizada!` });
     }
 
     _linearRec(i) {
         if (i === 0) {
             this._push({ stateId:'init', low:0, high:null, mid:null, ops:0,
-                narrative: `🚀 Iniciando Búsqueda Lineal Recursiva. Empezamos preguntando por la posición 0.` });
+                narrative: `🚀 Búsqueda Recursiva: Empezamos preguntando por la caja 0 y si no está, seguimos con la siguiente.` });
         }
         if (i >= this.array.length) {
-            this._push({ stateId:'notFound', low:i, high:null, mid:i, ops:this.comparisons,
-                narrative:`⚠️ Caso base: i=${i} ya sobrepasó el arreglo. No encontrado.` });
+            this._push({ stateId:'notFound', low:i, high:null, mid:null, ops:this.comparisons,
+                narrative:`🧐 Llegué al final del camino y no encontré el número ${this.target}. ¡Revisé todas las posiciones posibles!` });
             return;
         }
         this.comparisons++;
         this._push({ stateId:'checkMatch', low:i, high:null, mid:i, ops:this.comparisons,
-            narrative:`Llamada recursiva, posición ${i}. ¿El valor ${this.array[i]} es igual a ${this.target}?` });
+            narrative:`Llamada recursiva: Mirando dentro de la caja ${i}. ¿Es el ${this.array[i]} el que buscamos?` });
         if (this.array[i] === this.target) {
             this._push({ stateId:'found', low:i, high:null, mid:i, ops:this.comparisons,
-                narrative:`¡✅ Encontrado! La recursión devuelve el índice ${i}.` });
+                narrative:`¡SÍ! ✅ Encontramos el ${this.target} en la posición ${i}. ¡La misión ha sido un éxito!` });
             return;
         }
         this._linearRec(i + 1);

@@ -246,17 +246,17 @@ const ALGO_CONFIG = {
 
 // ── Step modal explanations by stateId ──
 const STEP_MODALS = {
-  checkMatch:     { icon:'🔍', title:'Comparando...', body:'El algoritmo está <strong>mirando</strong> este elemento y preguntando: ¿Es el que busco?' },
-  found:          { icon:'🎉', title:'¡Encontrado!',  body:'El elemento buscado fue hallado. La función devuelve el índice donde está guardado.' },
-  notFound:       { icon:'😢', title:'No encontrado', body:'Recorrimos todo el arreglo y el elemento no existe. Devolvemos -1.' },
-  swap:           { icon:'🔄', title:'¡Intercambio!', body:'Este par estaba en orden incorrecto. Los intercambiamos de posición.' },
-  fixed:          { icon:'✅', title:'Elemento fijo', body:'Este elemento ya llegó a su posición correcta y no se moverá más.' },
-  complete:       { icon:'🏆', title:'¡Ordenado!',    body:'El arreglo está completamente ordenado. ¡Algoritmo completado!' },
-  init:           { icon:'🚀', title:'Iniciando...',  body:'El algoritmo comienza. Se establecen las variables iniciales (Low, High, Mid).' },
-  whileCondition: { icon:'🔁', title:'Condición del bucle', body:'Se verifica si Low ≤ High. Si es verdad, continuamos buscando.' },
-  calcMid:        { icon:'📐', title:'Calculando centro', body:'Encontramos el índice del elemento central: mid = (low + high) / 2.' },
-  moveLow:        { icon:'→',  title:'Mover límite inferior', body:'El objetivo es MAYOR que el centro. Descartamos la mitad izquierda.' },
-  moveHigh:       { icon:'←',  title:'Mover límite superior', body:'El objetivo es MENOR que el centro. Descartamos la mitad derecha.' },
+  checkMatch:     { icon:'🔍', title:'Comparando...', body:'El algoritmo está <strong>mirando</strong> dentro de esta caja para ver si tiene lo que buscamos.' },
+  found:          { icon:'🎉', title:'¡LO ENCONTRAMOS!',  body:'¡Bingo! El elemento buscado estaba justo aquí. ¡Misión cumplida!' },
+  notFound:       { icon:'🧐', title:'No encontrado', body:'¡Vaya! He buscado en todas las posiciones disponibles y parece que ese elemento no existe aquí.' },
+  swap:           { icon:'🔄', title:'¡Intercambio!', body:'Estos dos estaban fuera de orden, así que los cambiamos de lugar para que todo quede bien.' },
+  fixed:          { icon:'✅', title:'¡Lugar asegurado!', body:'Este elemento ya está en su posición final y ordenada. ¡Ya no se moverá!' },
+  complete:       { icon:'🏆', title:'¡Todo Listo!',    body:'¡Felicidades! El algoritmo ha terminado su trabajo y todo está perfectamente ordenado.' },
+  init:           { icon:'🚀', title:'¡Empezamos!',  body:'Estamos preparando todo para comenzar la aventura. ¡Aquí vamos!' },
+  whileCondition: { icon:'🔁', title:'¿Seguimos?', body:'El algoritmo pregunta: ¿Aún nos quedan cajas por revisar? Si es así, ¡continuamos!' },
+  calcMid:        { icon:'📐', title:'Punto Medio', body:'Dividimos el grupo a la mitad para que la búsqueda sea mucho más rápida.' },
+  moveLow:        { icon:'→',  title:'Buscando arriba', body:'Lo que buscamos es MÁS GRANDE, así que descartamos la mitad de abajo.' },
+  moveHigh:       { icon:'←',  title:'Buscando abajo', body:'Lo que buscamos es MÁS PEQUEÑO, así que descartamos la mitad de arriba.' },
 };
 
 // ──────────────────────── CATEGORIES ────────────────────────
