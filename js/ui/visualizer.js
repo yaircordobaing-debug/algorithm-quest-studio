@@ -74,6 +74,10 @@ class Visualizer {
     applyState(step) {
         if (step.narrative && this.narrativeText) {
             this.narrativeText.textContent = step.narrative;
+            // Trigger animation
+            this.narrativeText.classList.remove('narrative-text-animate');
+            void this.narrativeText.offsetWidth; // trigger reflow
+            this.narrativeText.classList.add('narrative-text-animate');
         }
         this.highlightLine(step.stateId);
 
