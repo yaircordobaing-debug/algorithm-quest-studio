@@ -252,36 +252,85 @@ def partition(arr, low, high):
     },
     // ── More Advanced Sorting ──
     heap_sort: {
-        java: `// Heap Sort
-public void heapSort(int arr[]) {
-    int n = arr.length;
-    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
-    for (int i = n - 1; i > 0; i--) {
-        int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;
-        heapify(arr, i, 0);
+        java: `public class HeapSort {
+    public static void sort(int arr[]) {
+        int n = arr.length;
+        for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;
+            heapify(arr, i, 0);
+        }
+    }
+    static void heapify(int arr[], int n, int i) {
+        int largest = i, left = 2*i + 1, right = 2*i + 2;
+        if (left < n && arr[left] > arr[largest]) largest = left;
+        if (right < n && arr[right] > arr[largest]) largest = right;
+        if (largest != i) {
+            int swap = arr[i]; arr[i] = arr[largest]; arr[largest] = swap;
+            heapify(arr, n, largest);
+        }
     }
 }`,
-        python: `# Heap Sort
+        python: `def heapify(arr, n, i):
+    largest = i
+    l = 2 * i + 1
+    r = 2 * i + 2
+    if l < n and arr[i] < arr[l]: largest = l
+    if r < n and arr[largest] < arr[r]: largest = r
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]
+        heapify(arr, n, largest)
+
 def heap_sort(arr):
     n = len(arr)
     for i in range(n // 2 - 1, -1, -1): heapify(arr, n, i)
-    for i in range(n - 1, 0, -1):
+    for i in range(n-1, 0, -1):
         arr[i], arr[0] = arr[0], arr[i]
         heapify(arr, i, 0)`
     },
     radix_sort: {
-        java: `// Radix Sort
-public void radixSort(int[] arr) {
-    int max = getMax(arr);
-    for (int exp = 1; max / exp > 0; exp *= 10)
-        countSort(arr, exp);
+        java: `public class RadixSort {
+    static void countSort(int arr[], int exp) {
+        int n = arr.length;
+        int output[] = new int[n];
+        int count[] = new int[10];
+        for (int i = 0; i < n; i++) count[(arr[i] / exp) % 10]++;
+        for (int i = 1; i < 10; i++) count[i] += count[i - 1];
+        for (int i = n - 1; i >= 0; i--) {
+            output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+            count[(arr[i] / exp) % 10]--;
+        }
+        for (int i = 0; i < n; i++) arr[i] = output[i];
+    }
+    static void radixSort(int arr[]) {
+        int max = arr[0];
+        for (int i = 1; i < arr.length; i++) if (arr[i] > max) max = arr[i];
+        for (int exp = 1; max / exp > 0; exp *= 10) countSort(arr, exp);
+    }
 }`,
-        python: `# Radix Sort
+        python: `def count_sort(arr, exp):
+    n = len(arr)
+    output = [0] * n
+    count = [0] * 10
+    for i in range(0, n):
+        index = (arr[i] // exp)
+        count[(index) % 10] += 1
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+    i = n - 1
+    while i >= 0:
+        index = (arr[i] // exp)
+        output[count[(index) % 10] - 1] = arr[i]
+        count[(index) % 10] -= 1
+        i -= 1
+    for i in range(0, len(arr)):
+        arr[i] = output[i]
+
 def radix_sort(arr):
     max_val = max(arr)
     exp = 1
-    while max_val / exp > 1:
-        counting_sort(arr, exp)
+    while max_val // exp > 0:
+        count_sort(arr, exp)
         exp *= 10`
     },
     counting_sort: {

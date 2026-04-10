@@ -167,6 +167,56 @@ const ALGO_CONFIG = {
         <p>Divide → Ordena → Une. Es un algoritmo <strong>O(n log n)</strong> altamente eficiente.</p>
       </div>`
   },
+  heap_sort: {
+    engineKey: 'heap_sort',
+    variants: [{ value:'heap_sort', label:'Iterativo' }],
+    theory: `
+      <div class="theory-section">
+        <div class="theory-icon">🌳</div>
+        <h3>Explicación Sencilla</h3>
+        <p>Imagina un árbol donde siempre el número más grande está arriba 👑. Sacas el más grande, lo mandas al final y reorganizas el árbol.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">⚙️</div>
+        <h3>Qué hace</h3>
+        <p>Convierte el arreglo en un Max Heap, extrae el mayor elemento y lo coloca al final. Repite hasta terminar.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🎯</div>
+        <h3>Ejemplo</h3>
+        <p><code>[4, 10, 3, 5, 1]</code><br>Heap: <code>[10, 5, 3, 4, 1]</code><br>Sale 10 → <code>[5, 4, 3, 1, 10]</code> ✅</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🪄</div>
+        <h3>Resumen</h3>
+        <p>Siempre <strong>O(n log n)</strong>. No usa memoria extra. Muy eficiente y estable en rendimiento.</p>
+      </div>`
+  },
+  radix_sort: {
+    engineKey: 'radix_sort',
+    variants: [{ value:'radix_sort', label:'Por Dígitos' }],
+    theory: `
+      <div class="theory-section">
+        <div class="theory-icon">🔢</div>
+        <h3>Explicación Sencilla</h3>
+        <p>No compara números completos. Los ordena por partes: primero unidades 🟢, luego decenas 🔵, luego centenas 🟣.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">⚙️</div>
+        <h3>Qué hace</h3>
+        <p>Ordena dígito por dígito usando Counting Sort internamente. No se basa en comparaciones directas.</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🎯</div>
+        <h3>Ejemplo</h3>
+        <p><code>[170, 45, 75, 90]</code><br>Unidades: <code>[170, 90, 45, 75]</code><br>Decenas: <code>[45, 170, 75, 90]</code> ✅</p>
+      </div>
+      <div class="theory-section">
+        <div class="theory-icon">🪄</div>
+        <h3>Resumen</h3>
+        <p>Complejidad <strong>O(nk)</strong>. Ideal para ordenar grandes cantidades de números enteros.</p>
+      </div>`
+  },
   quick_sort: {
     engineKey: 'quick_sort',
     variants: [{ value:'quick_sort', label:'Recursivo' }],
@@ -228,8 +278,8 @@ const CATEGORIES = {
       { id:'selection_sort', title:'Selection Sort', desc:'Selecciona el mínimo y lo pone al principio, una y otra vez.',     complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
       { id:'merge_sort',     title:'Merge Sort',     desc:'🚀 Divide y vencerás. Muy eficiente: O(n log n). Top en entrevistas.', complexity:'O(n log n)',space:'O(n)', difficulty:'medium', tag:'sort', available:true },
       { id:'quick_sort',     title:'Quick Sort',     desc:'🚀 El rey de la práctica. Divide por pivote. Complejidad promedio: O(n log n).', complexity:'O(n log n)',space:'O(log n)', difficulty:'medium', tag:'sort', available:true },
-      { id:'heap_sort',      title:'Heap Sort',      desc:'Usa una estructura de árbol (heap) para extraer el máximo.',       complexity:'O(n log n)',space:'O(1)', difficulty:'hard',   tag:'sort', available:true },
-      { id:'radix_sort',     title:'Radix Sort',     desc:'Ordena dígito a dígito: unidades, decenas, centenas...',           complexity:'O(nk)',     space:'O(n+k)', difficulty:'medium', tag:'sort', available:true },
+      { id:'heap_sort',      title:'Heap Sort',      desc:'👑 El Rey del Árbol. Siempre O(n log n) y sin memoria extra.',       complexity:'O(n log n)',space:'O(1)', difficulty:'hard',   tag:'sort', available:true },
+      { id:'radix_sort',     title:'Radix Sort',     desc:'🔢 Ordena por dígitos (u, d, c). Ideal para números grandes.',           complexity:'O(nk)',     space:'O(n+k)', difficulty:'medium', tag:'sort', available:true },
       { id:'counting_sort',  title:'Counting Sort',  desc:'Cuenta cuántas veces aparece cada número y los reconstruye.',      complexity:'O(n+k)',    space:'O(k)', difficulty:'easy',   tag:'sort', available:true },
     ]
   },

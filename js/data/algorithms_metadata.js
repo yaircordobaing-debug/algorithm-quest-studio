@@ -33,8 +33,14 @@ const algorithmsMetadata = {
     },
     'insertion_sort': { name: 'Insertion Sort', category: 'Sorting',   complexity: 'O(n²)',      space: 'O(1)' },
     'selection_sort': { name: 'Selection Sort', category: 'Sorting',   complexity: 'O(n²)',      space: 'O(1)' },
-    'heap_sort':      { name: 'Heap Sort',      category: 'Sorting',   complexity: 'O(n log n)', space: 'O(1)' },
-    'radix_sort':     { name: 'Radix Sort',     category: 'Sorting',   complexity: 'O(nk)',      space: 'O(n+k)' },
+    'heap_sort': {
+        name: 'Heap Sort', category: 'Sorting', complexity: 'O(n log n)', space: 'O(1)',
+        theory: '<h3>👑 Heap Sort (Dummies)</h3><p>Imagina un árbol donde el número más grande siempre está arriba. Tomas el más grande, lo mandas al final y reorganizas. ¡Fácil y eficiente!</p>'
+    },
+    'radix_sort': {
+        name: 'Radix Sort', category: 'Sorting', complexity: 'O(nk)', space: 'O(n+k)',
+        theory: '<h3>🔢 Radix Sort (Dummies)</h3><p>No compara números completos. Ordena primero por unidades, luego decenas, luego centenas. ¡Como ordenar cartas por columnas!</p>'
+    },
     'counting_sort':  { name: 'Counting Sort',  category: 'Sorting',   complexity: 'O(n+k)',     space: 'O(k)' },
     'dfs':            { name: 'DFS',            category: 'Graphs',    complexity: 'O(V+E)',     space: 'O(V)' },
     'bfs':            { name: 'BFS',            category: 'Graphs',    complexity: 'O(V+E)',     space: 'O(V)' },

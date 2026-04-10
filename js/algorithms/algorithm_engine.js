@@ -18,8 +18,9 @@ class AlgorithmEngine {
         else if (t === 'insertion_sort')           this._insertionSort();
         else if (t === 'selection_sort')           this._selectionSort();
         else if (t === 'dfs')                      this._dfs();
-        else if (t === 'linear_reg')               this._linearReg();
         else if (t === 'quick_sort')               this._quickSort();
+        else if (t === 'heap_sort')                this._heapSort();
+        else if (t === 'radix_sort')               this._radixSort();
         else if (t === 'backtracking')             this._nQueens();
         else if (t === 'merge_sort')               this._mergeSort();
         else {
@@ -374,5 +375,68 @@ class AlgorithmEngine {
             narrative:`✅ Colocamos al líder ${pivot} en su lugar correcto (pos ${i+1}).` });
         
         return i + 1;
+    }
+
+    // ── Heap Sort ──
+    _heapSort() {
+        let arr = [...this.array], n = arr.length;
+        this._push({ stateId:'init', array:[...arr], narrative:'🌳 Heap Sort: Construyendo el árbol (Max Heap).' });
+        
+        // Build heap
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            this._heapify(arr, n, i);
+        }
+
+        // Extract
+        for (let i = n - 1; i > 0; i--) {
+            this._push({ stateId:'swap', low:0, mid:i, array:[...arr], narrative:`Moviendo la corona 👑 (${arr[0]}) al final del arreglo.` });
+            [arr[0], arr[i]] = [arr[i], arr[0]];
+            this._push({ stateId:'fixed', low:i, array:[...arr], narrative:`✅ El mayor quedó en su posición final.` });
+            this._heapify(arr, i, 0);
+        }
+        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Árbol ordenado perfectamente!' });
+    }
+
+    _heapify(arr, n, i) {
+        let largest = i, left = 2*i + 1, right = 2*i + 2;
+        this._push({ stateId:'calcMid', low:i, mid:left, high:right, array:[...arr], narrative:`Revisando nodo raíz ${arr[i]} y sus hijos.` });
+
+        if (left < n && arr[left] > arr[largest]) largest = left;
+        if (right < n && arr[right] > arr[largest]) largest = right;
+
+        if (largest !== i) {
+            this._push({ stateId:'swap', low:i, mid:largest, array:[...arr], narrative:`🔄 Hijo (${arr[largest]}) es mayor que raíz (${arr[i]}). Intercambiando.` });
+            [arr[i], arr[largest]] = [arr[largest], arr[i]];
+            this._heapify(arr, n, largest);
+        }
+    }
+
+    // ── Radix Sort ──
+    _radixSort() {
+        let arr = [...this.array];
+        let max = Math.max(...arr);
+        this._push({ stateId:'init', array:[...arr], narrative:'🔢 Radix Sort: Iniciamos el ordenamiento por dígitos.' });
+
+        for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
+            this._push({ stateId:'calcMid', array:[...arr], narrative: `Ordenando por el dígito de las ${exp === 1 ? 'Unidades' : exp === 10 ? 'Decenas' : 'Centenas'}.` });
+            this._countSortForRadix(arr, exp);
+            this._push({ stateId:'fixed', array:[...arr], narrative: `✅ Ronda terminada para el dígito ${exp}.` });
+        }
+        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Radix Sort completado! Números ordenados por partes.' });
+    }
+
+    _countSortForRadix(arr, exp) {
+        let n = arr.length, output = new Array(n), count = new Array(10).fill(0);
+        for (let i = 0; i < n; i++) count[Math.floor(arr[i] / exp) % 10]++;
+        for (let i = 1; i < 10; i++) count[i] += count[i - 1];
+
+        for (let i = n - 1; i >= 0; i--) {
+            let digit = Math.floor(arr[i] / exp) % 10;
+            output[count[digit] - 1] = arr[i];
+            count[digit]--;
+            // Narrative step for placing
+            this._push({ stateId:'checkMatch', low:i, array:[...output], narrative: `Colocando ${arr[i]} en su nueva posición basada en el dígito.` });
+        }
+        for (let i = 0; i < n; i++) arr[i] = output[i];
     }
 }
