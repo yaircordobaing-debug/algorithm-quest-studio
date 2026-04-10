@@ -382,7 +382,32 @@ function showExplorer(algoId) {
   currentAlgoId = algoId;
   document.getElementById('view-dashboard').classList.remove('active');
   document.getElementById('view-explorer').classList.add('active');
+  
+  // Show Intro Modal first
+  showIntroModal(algoId);
   initExplorer(algoId);
+}
+
+function showIntroModal(algoId) {
+  const cfg = ALGO_CONFIG[algoId] || {};
+  const meta = algorithmsMetadata[algoId] || {};
+  const content = document.getElementById('intro-content');
+  
+  content.innerHTML = `
+    <h1 style="font-size: 2rem; margin-bottom: 20px; color: var(--accent);">${meta.name || algoId}</h1>
+    <div class="theory-wrapper">
+      ${cfg.theory || '<p>Documentación técnica en proceso...</p>'}
+    </div>
+    <div class="modal-stats" style="display: flex; gap: 15px; margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+      <div style="flex:1;"><strong>Complejidad:</strong> <span style="color:var(--gold);">${meta.complexity || 'O(?)'}</span></div>
+      <div style="flex:1;"><strong>Espacio:</strong> <span style="color:var(--gold);">${meta.space || 'O(1)'}</span></div>
+    </div>
+  `;
+  document.getElementById('intro-modal').classList.add('active');
+}
+
+function hideIntroModal() {
+  document.getElementById('intro-modal').classList.remove('active');
 }
 
 function renderCards(cat) {
@@ -440,13 +465,6 @@ function initExplorer(algoId) {
 
   document.getElementById('exp-breadcrumb').textContent = `${catLabel} > ${meta.name || algoId}`;
   document.getElementById('exp-complexity').textContent = meta.complexity || 'O(?)';
-
-  // Theory
-  document.getElementById('theory-title').textContent = meta.name || algoId;
-  document.getElementById('theory-body').innerHTML    = cfg.theory || '<p>Documentación próximamente.</p>';
-  document.getElementById('th-complexity').textContent= meta.complexity || '-';
-  document.getElementById('th-space').textContent     = meta.space || 'O(1)';
-  document.getElementById('th-cat').textContent       = meta.category || '-';
 
   // Variant select
   const sel = document.getElementById('select-algo');
@@ -628,3 +646,10 @@ document.getElementById('input-target').addEventListener('change', () => resetEx
 // ─────────────────── BOOT ───────────────────
 createModal();
 renderCards('search');
+
+// Intro Modal Listeners
+document.getElementById('intro-close').addEventListener('click', hideIntroModal);
+document.getElementById('intro-start').addEventListener('click', hideIntroModal);
+document.getElementById('intro-modal').addEventListener('click', e => {
+  if (e.target.id === 'intro-modal') hideIntroModal();
+});

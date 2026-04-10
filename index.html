@@ -43,114 +43,123 @@
   </main>
 </div>
 
-<!-- EXPLORER VIEW -->
+<!-- EXPLORER VIEW (Studio Split-Screen) -->
 <div id="view-explorer" class="view">
+  <!-- 📘 Intro Theory Modal -->
+  <div id="intro-modal" class="intro-overlay">
+    <div class="intro-box glassmorphism">
+      <button id="intro-close" class="close-x">&times;</button>
+      <div id="intro-content"></div>
+      <div class="intro-footer">
+        <button id="intro-start" class="ctrl-btn primary-glow">Entendido, ¡Simular Ahora! 🚀</button>
+      </div>
+    </div>
+  </div>
+
   <div class="explorer-wrap">
     <header class="explorer-bar">
-      <button id="btn-back" class="back-btn">← Dashboard</button>
+      <button id="btn-back" class="nav-back-btn">← Dashboard</button>
       <div class="explorer-breadcrumb" id="exp-breadcrumb">Búsqueda > Linear Search</div>
       <div class="exp-bar-right">
-        <span id="exp-ops" class="ops-chip">0 operaciones</span>
         <span id="exp-complexity" class="complexity-chip">O(?)</span>
+        <span id="exp-ops" class="ops-chip">0 operaciones</span>
       </div>
     </header>
 
-    <div class="explorer-body">
-      <!-- LEFT: Theory -->
-      <aside class="theory-panel">
-        <h2 id="theory-title">Nombre</h2>
-        <div id="theory-body" class="theory-body"></div>
-        <div class="complexity-row">
-          <div class="stat-box"><span class="stat-label">Complejidad</span><span class="stat-val" id="th-complexity">-</span></div>
-          <div class="stat-box"><span class="stat-label">Espacio</span><span class="stat-val" id="th-space">O(1)</span></div>
-          <div class="stat-box"><span class="stat-label">Categoría</span><span class="stat-val" id="th-cat">-</span></div>
+    <div class="explorer-split">
+      <!-- 💻 LEFT: Code Panel -->
+      <aside class="split-side split-left">
+        <div class="panel-header">
+          <h3>💻 Código Fuente</h3>
+          <div class="code-controls">
+            <select id="select-algo" class="minimal-select"></select>
+            <div class="code-tabs">
+              <button class="tab-btn active" data-lang="java">Java</button>
+              <button class="tab-btn" data-lang="python">Python</button>
+              <button class="tab-btn" data-lang="javascript">JS</button>
+            </div>
+          </div>
         </div>
+        <div id="code-display" class="code-display scroll-skin"></div>
       </aside>
 
-      <!-- RIGHT: Visualization -->
-      <section class="viz-panel">
-        <!-- Code Tabs -->
-        <div class="code-tabs">
-          <button class="tab-btn active" data-lang="java">Java</button>
-          <button class="tab-btn" data-lang="python">Python</button>
-          <select id="select-algo" class="algo-select"></select>
-        </div>
-        <div id="code-display" class="code-display"></div>
+      <!-- 🧪 RIGHT: Simulation Studio -->
+      <main class="split-side split-right">
+        <div class="viz-studio">
+          <!-- 🏷️ Floating Narrative HUD (Overlay on Canvas) -->
+          <div id="narrative-box" class="narrative-hud glass">
+            <p id="narrative-text">Selecciona un valor y presiona ▶ Reproducir.</p>
+          </div>
 
-        <!-- Canvas Base -->
-        <div class="viz-canvas" id="viz-canvas" style="position:relative; flex-direction:column;">
-          
-          <!-- ARRAY RENDERER -->
-          <div id="render-array" class="renderer-layer active">
+          <!-- 🖼️ Visualizer Area -->
+          <div class="viz-container" id="viz-container">
             <div id="ptr-row" class="ptr-row">
               <div id="ptr-low"  class="ptr ptr-l" style="display:none">▼<span>L</span></div>
               <div id="ptr-mid"  class="ptr ptr-m" style="display:none">▼<span>M</span></div>
               <div id="ptr-high" class="ptr ptr-h" style="display:none">▼<span>H</span></div>
             </div>
-            <div id="chest-row" class="chest-row"></div>
-          </div>
 
-          <!-- GRAPH RENDERER -->
-          <div id="render-graph" class="renderer-layer">
-            <canvas id="graph-canvas" width="600" height="280"></canvas>
-          </div>
+            <!-- Layered Renderers -->
+            <div id="render-array" class="renderer-layer active">
+              <div id="chest-row" class="chest-row"></div>
+            </div>
 
-          <!-- CARTESIAN RENDERER -->
-          <div id="render-cartesian" class="renderer-layer">
-            <canvas id="cartesian-canvas" width="600" height="280"></canvas>
-          </div>
+            <div id="render-graph" class="renderer-layer">
+              <canvas id="graph-canvas" width="600" height="300"></canvas>
+            </div>
 
-          <!-- TREE RENDERER (HEAP) -->
-          <div id="render-tree" class="renderer-layer">
-            <canvas id="tree-canvas" width="600" height="280"></canvas>
-          </div>
+            <div id="render-cartesian" class="renderer-layer">
+              <canvas id="cartesian-canvas" width="600" height="300"></canvas>
+            </div>
 
-          <!-- RADIX RENDERER (BUCKETS) -->
-          <div id="render-radix" class="renderer-layer">
-            <div id="radix-main-row" class="chest-row-radix"></div>
-            <div id="radix-buckets" class="radix-buckets-container">
-              <!-- JS will fill 10 buckets here -->
+            <div id="render-tree" class="renderer-layer">
+              <canvas id="tree-canvas" width="600" height="300"></canvas>
+            </div>
+
+            <div id="render-radix" class="renderer-layer">
+              <div id="radix-main-row" class="chest-row-radix"></div>
+              <div id="radix-buckets" class="radix-buckets-container"></div>
+            </div>
+
+            <div id="render-board" class="renderer-layer">
+              <div id="board-grid" class="board-grid"></div>
             </div>
           </div>
 
-          <!-- BOARD RENDERER -->
-          <div id="render-board" class="renderer-layer">
-            <div id="board-grid" class="board-grid"></div>
-          </div>
-
-          <div id="narrative-box" class="narrative-box">
-            <p id="narrative-text">Selecciona un valor y presiona ▶ Iniciar.</p>
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls-bar">
-          <div class="input-group-container" id="input-group">
-            <div class="input-subgroup">
-              <label>Datos:</label>
-              <div class="input-with-action">
-                <input id="input-data" type="text" value="4, 8, 15, 16, 23, 42, 55, 67, 89" class="target-input">
-                <button id="btn-shuffle" class="ctrl-btn secondary" title="Aleatorio">🎲</button>
+          <!-- 🎛️ Playback Controls (Sticky at bottom) -->
+          <div class="playback-bar glass">
+            <div class="data-input-group">
+              <div class="sub-input">
+                <label>Datos:</label>
+                <div class="input-flex">
+                  <input id="input-data" type="text" value="4, 8, 15, 16, 23, 42" class="neo-input">
+                  <button id="btn-shuffle" class="icon-btn" title="Shuffle">🎲</button>
+                </div>
+              </div>
+              <div class="sub-input" id="search-target-wrap">
+                <label>Objetivo:</label>
+                <input id="input-target" type="number" value="42" class="neo-input target-w">
               </div>
             </div>
-            <div class="input-subgroup" id="search-target-wrap">
-              <label>Objetivo:</label>
-              <input id="input-target" type="number" value="42" class="target-input">
+
+            <div class="playback-controls">
+              <button id="btn-prev"  class="p-btn secondary" disabled>⏮</button>
+              <button id="btn-play"  class="p-btn primary-glow">▶</button>
+              <button id="btn-next"  class="p-btn secondary" disabled>⏭</button>
+              <button id="btn-reset" class="p-btn secondary">↺</button>
+            </div>
+
+            <div class="playback-speed">
+              <label>Velocidad:</label>
+              <input type="range" id="speed-slider" min="1" max="5" value="3" class="neo-range">
+            </div>
+
+            <div class="playback-info">
+              Paso <span id="step-idx">0</span>/<span id="step-tot">0</span>
             </div>
           </div>
-          <div class="btn-group">
-            <button id="btn-prev"  class="ctrl-btn secondary" disabled>⏮ Ant</button>
-            <button id="btn-play"  class="ctrl-btn primary">▶ Reproducir</button>
-            <button id="btn-next"  class="ctrl-btn secondary" disabled>Sig ⏭</button>
-            <button id="btn-reset" class="ctrl-btn secondary">↺</button>
-          </div>
-          <div class="speed-group">
-            <label>Velocidad:</label>
-            <input type="range" id="speed-slider" min="1" max="5" value="3">
-          </div>
-          <div class="step-info">Paso <span id="step-idx">0</span>/<span id="step-tot">0</span></div>
         </div>
-      </section>
+      </main>
     </div>
   </div>
 </div>
