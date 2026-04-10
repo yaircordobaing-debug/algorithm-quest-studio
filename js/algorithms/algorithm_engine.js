@@ -20,6 +20,7 @@ class AlgorithmEngine {
         else if (t === 'dfs')                      this._dfs();
         else if (t === 'linear_reg')               this._linearReg();
         else if (t === 'backtracking')             this._nQueens();
+        else if (t === 'merge_sort')               this._mergeSort();
         else {
             this._push({ stateId:'init', narrative: 'Este algoritmo aún no tiene animaciones de nodos/arreglos implementadas. Revisa el código de la izquierda 💻.' });
         }
@@ -281,5 +282,54 @@ class AlgorithmEngine {
         let b = (sumY - m * sumX) / n;
 
         this._push({ renderer: 'cartesian', stateId: 'complete', narrative: `🏆 Convergencia. Línea óptima hallada: y = ${m.toFixed(2)}x + ${b.toFixed(2)}`, data: state({x1:0, y1:b, x2:1, y2:m*1+b}) });
+    }
+
+    // ── Merge Sort (Recursive with Steps) ──
+    _mergeSort() {
+        let arr = [...this.array];
+        this._push({ stateId:'init', array:[...arr], narrative:'🚀 Inicia Merge Sort: El gran "Divide y Vencerás".' });
+        this._mergeSortRec(arr, 0, arr.length - 1);
+        this._push({ stateId:'complete', array:[...arr], narrative:'🏆 ¡Arreglo unido y ordenado perfectamente!' });
+    }
+
+    _mergeSortRec(arr, l, r) {
+        if (l < r) {
+            let m = Math.floor((l + r) / 2);
+            this._push({ stateId:'checkMatch', low:l, high:r, mid:m, array:[...arr], 
+                narrative:`Dividiendo el grupo [${l} a ${r}] en dos: [${l} a ${m}] y [${m+1} a ${r}].` });
+            
+            this._mergeSortRec(arr, l, m);
+            this._mergeSortRec(arr, m + 1, r);
+            this._merge(arr, l, m, r);
+        }
+    }
+
+    _merge(arr, l, m, r) {
+        let temp = [];
+        let i = l, j = m + 1;
+        
+        this._push({ stateId:'calcMid', low:l, high:r, mid:m, array:[...arr],
+            narrative:`Comparando y uniendo los dos grupos: de ${l} a ${m} y de ${m+1} a ${r}.` });
+
+        while (i <= m && j <= r) {
+            this.comparisons++;
+            if (arr[i] <= arr[j]) {
+                this._push({ stateId:'checkMatch', low:i, mid:j, array:[...arr], narrative:`${arr[i]} ≤ ${arr[j]}: tomamos del grupo izquierdo.` });
+                temp.push(arr[i++]);
+            } else {
+                this._push({ stateId:'checkMatch', low:i, mid:j, array:[...arr], narrative:`${arr[i]} > ${arr[j]}: tomamos del grupo derecho.` });
+                temp.push(arr[j++]);
+            }
+        }
+
+        while (i <= m) temp.push(arr[i++]);
+        while (j <= r) temp.push(arr[j++]);
+
+        for (let k = 0; k < temp.length; k++) {
+            arr[l + k] = temp[k];
+        }
+        
+        this._push({ stateId:'fixed', low:l, high:r, array:[...arr], 
+            narrative:`✅ Grupo entre ${l} y ${r} ha sido unido y ordenado.` });
     }
 }

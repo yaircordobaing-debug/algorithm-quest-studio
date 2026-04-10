@@ -12,7 +12,13 @@ const algorithmsMetadata = {
         theory: '<h3>Bubble Sort</h3><p>Compara pares adyacentes. Los valores mayores "burbujean" hacia el final en cada pasada.</p>'
     },
     'quick_sort':     { name: 'Quick Sort',     category: 'Sorting',   complexity: 'O(n log n)', space: 'O(log n)' },
-    'merge_sort':     { name: 'Merge Sort',     category: 'Sorting',   complexity: 'O(n log n)', space: 'O(n)' },
+    'merge_sort': {
+        name: 'Merge Sort', 
+        category: 'Sorting', 
+        complexity: 'O(n log n)', 
+        space: 'O(n)',
+        theory: '<h3>🚀 Merge Sort (Dummies)</h3><p>Imagina que tienes muchas cartas desordenadas. Las divides en montoncitos hasta que queda 1 sola carta. Luego, las unes ordenadamente. ¡Divide, Ordena y Une!</p>'
+    },
     'insertion_sort': { name: 'Insertion Sort', category: 'Sorting',   complexity: 'O(n²)',      space: 'O(1)' },
     'selection_sort': { name: 'Selection Sort', category: 'Sorting',   complexity: 'O(n²)',      space: 'O(1)' },
     'heap_sort':      { name: 'Heap Sort',      category: 'Sorting',   complexity: 'O(n log n)', space: 'O(1)' },

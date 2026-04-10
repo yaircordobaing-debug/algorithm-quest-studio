@@ -176,7 +176,7 @@ const CATEGORIES = {
       { id:'bubble_sort',    title:'Bubble Sort',    desc:'Los mayores "burbujean" hacia el final. Simple y didáctico.',       complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
       { id:'insertion_sort', title:'Insertion Sort', desc:'Como ordenar cartas: inserta cada elemento en su lugar correcto.', complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
       { id:'selection_sort', title:'Selection Sort', desc:'Selecciona el mínimo y lo pone al principio, una y otra vez.',     complexity:'O(n²)',     space:'O(1)', difficulty:'easy',   tag:'sort', available:true },
-      { id:'merge_sort',     title:'Merge Sort',     desc:'Divide la lista a la mitad, ordena cada parte y las une.',         complexity:'O(n log n)',space:'O(n)', difficulty:'medium', tag:'sort', available:true },
+      { id:'merge_sort',     title:'Merge Sort',     desc:'🚀 Divide y vencerás. Muy eficiente: O(n log n). Top en entrevistas.', complexity:'O(n log n)',space:'O(n)', difficulty:'medium', tag:'sort', available:true },
       { id:'quick_sort',     title:'Quick Sort',     desc:'Elige un pivote y pone menores a la izquierda, mayores a la derecha.', complexity:'O(n log n)',space:'O(log n)', difficulty:'medium', tag:'sort', available:true },
       { id:'heap_sort',      title:'Heap Sort',      desc:'Usa una estructura de árbol (heap) para extraer el máximo.',       complexity:'O(n log n)',space:'O(1)', difficulty:'hard',   tag:'sort', available:true },
       { id:'radix_sort',     title:'Radix Sort',     desc:'Ordena dígito a dígito: unidades, decenas, centenas...',           complexity:'O(nk)',     space:'O(n+k)', difficulty:'medium', tag:'sort', available:true },

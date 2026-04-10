@@ -154,24 +154,57 @@ def selection_sort(arr):
     },
     // ── Merge Sort ──
     merge_sort: {
-        java: `// Merge Sort - Divide y Vencerás
-public void mergeSort(int[] arr, int l, int r) {
-    if (l < r) {
-        int mid = (l + r) / 2;
-        mergeSort(arr, l, mid);     // Mitad izquierda
-        mergeSort(arr, mid + 1, r); // Mitad derecha
-        merge(arr, l, mid, r);      // Combinar
+        java: `public class MergeSort {
+    public static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
     }
-}
-// merge() combina dos mitades ya ordenadas`,
-        python: `# Merge Sort
-def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    mid = len(arr) // 2
-    L = merge_sort(arr[:mid])
-    R = merge_sort(arr[mid:])
-    return merge(L, R)  # Combinar ordenadas`
+
+    public static void merge(int[] arr, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+
+        while (i <= mid && j <= right) {
+            if (arr[i] < arr[j]) {
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+
+        while (i <= mid) temp[k++] = arr[i++];
+        while (j <= right) temp[k++] = arr[j++];
+
+        for (int x = 0; x < temp.length; x++) {
+            arr[left + x] = temp[x];
+        }
+    }
+}`,
+        python: `def merge_sort(arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        L = arr[:mid]
+        R = arr[mid:]
+
+        merge_sort(L)
+        merge_sort(R)
+
+        i = j = k = 0
+        while i < len(L) and j < len(R):
+            if (L[i] < R[j]):
+                arr[k] = L[i]; i += 1
+            else:
+                arr[k] = R[j]; j += 1
+            k += 1
+
+        while i < len(L):
+            arr[k] = L[i]; i += 1; k += 1
+        while j < len(R):
+            arr[k] = R[j]; j += 1; k += 1`
     },
     // ── Quick Sort ──
     quick_sort: {
